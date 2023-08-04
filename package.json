@@ -9,5 +9,10 @@
         "axios": "^1.1.2",
         "laravel-vite-plugin": "^0.7.5",
         "vite": "^4.4.7"
+    },
+    "dependencies": {
+        "@vitejs/plugin-vue": "^4.2.3",
+        "admin-lte": "3.2",
+        "vue-router": "^4.2.4"
     }
 }
