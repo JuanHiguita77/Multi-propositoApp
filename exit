@@ -1,0 +1,29 @@
+[33mcommit 89a6e8ccd5f719289cf66da5efafe9b9959f412c[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: YEPES-HIGUITA <juanferhiguita65@gmail.com>
+Date:   Tue Aug 15 23:51:39 2023 -0500
+
+    Se agregaron funciones de eliminar usuarios y busqueda en caliente, fecha y rol por usuario
+
+[33mcommit e96af28f7c8368eae7fd4090fd740524f740af62[m[33m ([m[1;31mmultiapp/main[m[33m)[m
+Author: YEPES-HIGUITA <juanferhiguita65@gmail.com>
+Date:   Sat Aug 12 19:09:30 2023 -0500
+
+    Se agrega formulario, validacion de formulario, modificacion de usuarios activa y alerta por accion usando toastr
+
+[33mcommit c914d3c4ee86970283f279d880e2430c40cca008[m
+Author: YEPES-HIGUITA <juanferhiguita65@gmail.com>
+Date:   Thu Aug 3 20:41:51 2023 -0500
+
+    Se agrega vue router y los links sin recargar pagina
+
+[33mcommit 21f15d2091c70e910034027a6c24bc5f27828cb7[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: YEPES-HIGUITA <juanferhiguita65@gmail.com>
+Date:   Fri Jul 28 23:51:41 2023 -0500
+
+    Primer commit
+
+[33mcommit 680229e5ea7d1616950122bb5b6e6a0b95db95f2[m[33m ([m[1;32mdevelop[m[33m)[m
+Author: YEPES-HIGUITA <juanferhiguita65@gmail.com>
+Date:   Fri Jul 28 23:49:58 2023 -0500
+
+    Initial commit

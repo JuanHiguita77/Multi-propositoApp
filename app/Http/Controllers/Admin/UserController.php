@@ -11,17 +11,17 @@ class UserController extends Controller
     //Metodo para obtener los usuarios
     public function index()
     {
+        
         $users = User::latest()->get()->map(function ($user)
-            {
-                return [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    //traemos la configuracion de fecha del app.php
-                    'created_at' => $user->created_at->format(config('app.date_format')),
-                ];  
-            });
-
+        {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                //traemos la configuracion de fecha del app.php
+                'created_at' => $user->created_at->toFormattedDate(),
+            ];  
+        });
         return $users;
     }
 

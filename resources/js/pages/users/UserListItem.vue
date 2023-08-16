@@ -81,6 +81,7 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 		<td>{{index + 1}}</td>
 		<td>{{user.name}}</td>
 		<td>{{user.email}}</td>
+		
 		<!-- funcion de la fecha en UserController -->
 		<td>{{user.created_at}}</td>
 		<td>
