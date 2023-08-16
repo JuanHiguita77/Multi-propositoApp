@@ -1,10 +1,11 @@
 <script setup>
 import axios from 'axios';
-import {ref, onMounted, reactive} from 'vue';
+import {ref, onMounted, reactive, watch} from 'vue';
 import {Form,Field} from 'vee-validate';
 import * as yup from 'yup';
 import {useToastr} from '../../toastr.js';//notificacion de success para el formulario
-
+import UserListItem from './UserListItem.vue';
+import { debounce } from 'lodash';
 
 	const toastr = useToastr();
 
@@ -16,6 +17,7 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 
 	//Se define como null para evitar errores
 	const form = ref(null);
+
 
 	//OBJETO CON LOS NUEVOS DATOS
 	/*const form = reactive({
@@ -128,6 +130,11 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 	        });
 	}
 
+	const userDeleted = (userId)=>
+	{
+		users.value.data = users.value.data.filter(user => user.id !== userId);
+	}
+
 	//Metodo para enviar los datos a un metodo u otro
 	//llamamos al componente actions que contiene eventos tales como resetForm el cual usamos mas adelante
 	const handleSubmit = (values, actions) =>
@@ -158,6 +165,33 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 		});
 	}*/
 
+	//referencia para el buscador de usuarios
+	const searchQuery = ref(null);
+
+	//Funcion peticion al servidor para la busqueda
+	const search = ()=>
+	{
+		axios.get('/api/users/search',
+		{
+			params: {
+				query: searchQuery.value
+			}
+		})
+		.then(response =>
+		{
+			users.value = response.data;
+		})
+		.catch(error => 
+		{
+			console.log(error);
+		})
+	}
+
+	watch(searchQuery, debounce(()=>
+	{
+		search();
+	}, 300));
+
 </script>
 
 <template>
@@ -180,9 +214,17 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 <!-- Tabla de usuarios -->
 	<div class="content">
 		<div class="container-fluid">
-			<button @click="addUser" type="button" class="mb-2 btn btn-primary">
-				Add New User
-			</button>
+
+			<div class="d-flex justify-content-between">
+				<button @click="addUser" type="button" class="mb-2 btn btn-primary">
+					Add New User
+				</button>
+
+				<!-- cuadro de busqueda con vmodel y clickevent -->
+				<div >
+					<input type="text" v-model="searchQuery" class="form-control " placeholder="Search">
+				</div>
+			</div>
 
 			<div class="card">	
 				<div class="card-body">
@@ -197,18 +239,24 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 								<th>Options</th>
 							</tr>
 						</thead>
+
+						<tbody v-if="users.length > 0">
+							<!-- Llamamos los eventos del Userlist -->
+							<UserListItem v-for="(user,index) in users" :key = "user.id"
+
+							:user = user
+
+							:index = index
+
+							@edit-user = "editUser"
+
+							@user-deleted = "userDeleted"
+							/>		
+						</tbody>
+
 						<tbody>
-							<tr v-for="(user,index) in users" :key="user.id">
-								<td>{{index}}</td>
-								<td>{{user.name}}</td>
-								<td>{{user.email}}</td>
-								<td>-</td>
-								<td>-</td>
-								<td>
-									<a href="#">
-										<i class="fa fa-edit" @click.prevent="editUser(user)"></i>
-									</a>
-								</td>
+							<tr>
+								<td colspan="6" class="text-center">No results found...</td>
 							</tr>
 						</tbody>
 					</table>
@@ -233,7 +281,7 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 	                </div>
 
 	                <!-- Le pasamos la accion con submit, el esquema de validacion y el mensaje de error -->
-	                <Form ref="form" @submit="handleSubmit" :validation-schema=" editing ? editUserschema : createUserschema" v-slot="{errors}" :initial-values="formValues">
+	            <Form ref="form" @submit="handleSubmit" :validation-schema=" editing ? editUserschema : createUserschema" v-slot="{errors}" :initial-values="formValues">
 	                    <div class="modal-body">
 	                        <div class="form-group" >
 	                            <label for="name">Name</label>
@@ -269,9 +317,9 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 		                    <!-- metodo createUser -->
 		                    <button type="submit" class="btn btn-primary">Save</button>
 		                </div>
-		            </Form>
-	            </div>
+		        </Form>
 	        </div>
 	    </div>
+	</div>
 </template>
 
