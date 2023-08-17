@@ -24,9 +24,13 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 	const emit = defineEmits(['userDeleted', 'editUser','confirmUserDeletion']);
 
 	//se le pasan los dos props al componente
-	const props = defineProps({
+	const props = defineProps(
+	{
 		user: Object,
+
 		index: Number,
+
+		selectAll: Boolean,
 	});
 
 	//variable para referencia el usuario que vamos a borrar
@@ -84,7 +88,7 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 <template>
 	<tr>
 		<td>
-			<input type="checkbox" @change="toggleSelection"/>
+			<input type="checkbox" :checked="selectAll" @change="toggleSelection"/>
 		</td>
 		<td>{{index + 1}}</td>
 		<td>{{user.name}}</td>

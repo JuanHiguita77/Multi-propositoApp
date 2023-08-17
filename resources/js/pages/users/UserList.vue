@@ -128,7 +128,6 @@ import { Bootstrap4Pagination } from 'laravel-vue-pagination';
 	        })
 	        .catch((error) => {
 	            setErrors(error.response.data.errors);
-	            console.log(error);
 	        });
 	}
 
@@ -229,10 +228,26 @@ import { Bootstrap4Pagination } from 'laravel-vue-pagination';
 
 			selectedUsers.value = [];
 
+			selectAll.value = false;
+
 			toastr.success(response.data.message);
 		})
 	}
 
+	//referencia v-model
+	const selectAll = ref(false);
+
+	const selectAllUsers = () =>
+	{
+		if (selectAll.value)
+		{
+			selectedUsers.value = users.value.data.map(user =>user.id)
+		}
+		else 
+		{
+			selectedUsers.value = [];
+		};
+	}
 
 </script>
 
@@ -282,10 +297,12 @@ import { Bootstrap4Pagination } from 'laravel-vue-pagination';
 					<table class="table table-bordered">
 						<thead>
 							<tr>
+
 								<!-- Checkbox para seleccionar todo -->
 								<th>
-									<input type="checkbox"/>
-								</th>			
+									<input type="checkbox" @change="selectAllUsers" v-model="selectAll"/>
+								</th>
+
 								<th style="width: 10px">#</th>
 								<th>Name</th>
 								<th>Email</th>
@@ -307,7 +324,7 @@ import { Bootstrap4Pagination } from 'laravel-vue-pagination';
 
 							@user-deleted = "userDeleted"
 
-							@toggle-selection="toggleSelection"
+							@toggle-selection="toggleSelection" :select-all='selectAll'
 							/>		
 						</tbody>
 
