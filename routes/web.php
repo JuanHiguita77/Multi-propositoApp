@@ -24,20 +24,27 @@ Route::get('/admin/dashboard', function () {
     return view('dashboard');
 });*/
 
-//Ruta para borrar usuarios, se le pasa el usuario completo y en la funcion controladora ya se saca el id
-Route::delete('/api/users/{user}', [UserController::class, 'delete']);
-
 //Obtenemos los usuarios con el metodo index en userController
 Route::get('/api/users', [UserController::class, 'index']);
 
-Route::get('/api/users/search', [UserController::class, 'search']);
-
-//Le indicamos la ruta al metodo post con el metodo store en userController
+//Le indicamos la ruta al metodo post para guardar los usuarios y se define en el controlador
 Route::post('/api/users', [UserController::class, 'store']);
+
+Route::patch('/api/users/{user}/change-role', [UserController::class, 'changeRole']);
 
 Route::put('/api/users/{user}', [UserController::class, 'update']);
 
-Route::patch('/api/users/{user}/change-role', [UserController::class, 'changeRole']);
+//Ruta para borrar usuarios, se le pasa el usuario completo y en la funcion controladora ya se saca el id
+Route::delete('/api/users/{user}', [UserController::class, 'delete']);
+
+
+Route::get('/api/users/search', [UserController::class, 'search']);
+
+
+Route::delete('/api/users', [UserController::class, 'bulkDelete']);
+
+
+
+
 //obtenemos la vista segun la ruta
 Route::get('{view}',ApplicationController::class)->where('view', '(.*)');
-

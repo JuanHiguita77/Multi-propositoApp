@@ -21,10 +21,10 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 	]);
 
 	//Aqui se definen los eventos emits
-	const emit = defineEmits(['userDeleted', 'editUser']);
+	const emit = defineEmits(['userDeleted', 'editUser','confirmUserDeletion']);
 
 	//se le pasan los dos props al componente
-	defineProps({
+	const props = defineProps({
 		user: Object,
 		index: Number,
 	});
@@ -68,6 +68,11 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 		})
 	}
 
+	const toggleSelection = ()=>
+	{
+		emit('toggleSelection', props.user);
+	}
+
 	/*Podemos crear esta funcion desde el template directamente
 	const editUser = (user)=>
 	{
@@ -78,10 +83,13 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 
 <template>
 	<tr>
+		<td>
+			<input type="checkbox" @change="toggleSelection"/>
+		</td>
 		<td>{{index + 1}}</td>
 		<td>{{user.name}}</td>
 		<td>{{user.email}}</td>
-		
+
 		<!-- funcion de la fecha en UserController -->
 		<td>{{user.created_at}}</td>
 		<td>

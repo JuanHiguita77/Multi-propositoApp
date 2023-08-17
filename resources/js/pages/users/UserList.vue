@@ -6,10 +6,12 @@ import * as yup from 'yup';
 import {useToastr} from '../../toastr.js';//notificacion de success para el formulario
 import UserListItem from './UserListItem.vue';
 import { debounce } from 'lodash';
+import { Bootstrap4Pagination } from 'laravel-vue-pagination';
+
 
 	const toastr = useToastr();
 
-	const users = ref([]);
+	const users = ref({'data':[]});
 
 	const editing = ref(false);
 
@@ -29,9 +31,9 @@ import { debounce } from 'lodash';
 
 
 	//metodo get para obtener usuarios de base de datos
-	const getUsers = () =>
+	const getUsers = (page = 1) =>
 	{
-		axios.get('/api/users')
+		axios.get(`/api/users?page=${page}`)
 		.then((response) =>{
 			users.value = response.data;
 		});
@@ -192,6 +194,46 @@ import { debounce } from 'lodash';
 		search();
 	}, 300));
 
+	const selectedUsers = ref([]);
+
+	const toggleSelection = (user) =>
+	{
+		//id de los usuarios seleccionados
+		const index = selectedUsers.value.indexOf(user.id);
+
+		//condicional cuando no encuentra alguno seleccionado
+		if (index === -1)
+		{
+			//Ingresa el value al arreglo de seleccionados
+			selectedUsers.value.push(user.id);
+		}
+		else 
+		{
+			//Elimina el ultimo que seleccionamos
+			selectedUsers.value.splice(index, 1);
+		};
+	}
+
+	const bulkDelete = ()=>
+	{
+		axios.delete('/api/users',
+		{
+			data:
+			{
+				ids:selectedUsers.value
+			}
+		})
+		.then(response =>
+		{
+			users.value.data = users.value.data.filter(user => !selectedUsers.value.includes(user.id));
+
+			selectedUsers.value = [];
+
+			toastr.success(response.data.message);
+		})
+	}
+
+
 </script>
 
 <template>
@@ -214,11 +256,20 @@ import { debounce } from 'lodash';
 <!-- Tabla de usuarios -->
 	<div class="content">
 		<div class="container-fluid">
-
 			<div class="d-flex justify-content-between">
-				<button @click="addUser" type="button" class="mb-2 btn btn-primary">
-					Add New User
-				</button>
+				<div>
+					<!-- boton para crear un nuevo usuario -->
+					<button @click="addUser" type="button" class="mb-2 btn btn-primary">
+						Add New User
+					</button>
+
+					<!-- boton para borrar el usuario seleccionado -->
+
+					<!-- v-if para aparecer cuando se selecciona algun elemento -->
+					<button v-if="selectedUsers.length > 0" @click="bulkDelete" type="button" class="mb-2 ml-2 btn btn-danger">
+						Delete Selected 
+					</button>
+				</div>
 
 				<!-- cuadro de busqueda con vmodel y clickevent -->
 				<div >
@@ -231,6 +282,10 @@ import { debounce } from 'lodash';
 					<table class="table table-bordered">
 						<thead>
 							<tr>
+								<!-- Checkbox para seleccionar todo -->
+								<th>
+									<input type="checkbox"/>
+								</th>			
 								<th style="width: 10px">#</th>
 								<th>Name</th>
 								<th>Email</th>
@@ -240,9 +295,9 @@ import { debounce } from 'lodash';
 							</tr>
 						</thead>
 
-						<tbody v-if="users.length > 0">
+						<tbody v-if="users.data.length > 0">
 							<!-- Llamamos los eventos del Userlist -->
-							<UserListItem v-for="(user,index) in users" :key = "user.id"
+							<UserListItem v-for="(user,index) in users.data" :key = "user.id"
 
 							:user = user
 
@@ -251,6 +306,8 @@ import { debounce } from 'lodash';
 							@edit-user = "editUser"
 
 							@user-deleted = "userDeleted"
+
+							@toggle-selection="toggleSelection"
 							/>		
 						</tbody>
 
@@ -262,6 +319,11 @@ import { debounce } from 'lodash';
 					</table>
 				</div>
 			</div>
+
+		<Bootstrap4Pagination
+	        :data="users"
+	        @pagination-change-page="getUsers"
+	    />
 		</div>
 	</div>
 

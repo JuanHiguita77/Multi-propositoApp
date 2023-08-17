@@ -12,7 +12,9 @@ class UserController extends Controller
     public function index()
     {
         
-        $users = User::latest()->get()->map(function ($user)
+        $users = User::latest()->paginate(3);
+
+        /*->map(function ($user)
         {
             return [
                 'id' => $user->id,
@@ -21,7 +23,7 @@ class UserController extends Controller
                 //traemos la configuracion de fecha del app.php
                 'created_at' => $user->created_at->toFormattedDate(),
             ];  
-        });
+        });*/
         return $users;
     }
 
@@ -84,8 +86,15 @@ class UserController extends Controller
     {
         $searchQuery = request('query');
 
-        $users = User::where('name','like', "%{$searchQuery}%")->get();
+        $users = User::where('name','like', "%{$searchQuery}%")->paginate();
 
         return response()->json($users);
+    }
+
+    public function bulkDelete()
+    {
+        User::whereIn('id', request('ids'))->delete();
+
+        return response()->json(['message' => 'Users deleted succesfully']);
     }
 }
