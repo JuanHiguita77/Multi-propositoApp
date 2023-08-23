@@ -135,10 +135,10 @@ import { Bootstrap4Pagination } from 'laravel-vue-pagination';
 	        });
 	}
 
-	const userDeleted = (userId)=>
+	/*const userDeleted = (userId)=>
 	{
 		users.value.data = users.value.data.filter(user => user.id !== userId);
-	}
+	}*/
 
 	//Metodo para enviar los datos a un metodo u otro
 	//llamamos al componente actions que contiene eventos tales como resetForm el cual usamos mas adelante
@@ -215,6 +215,33 @@ import { Bootstrap4Pagination } from 'laravel-vue-pagination';
 			//Elimina el ultimo que seleccionamos
 			selectedUsers.value.splice(index, 1);
 		};
+	}
+
+	//variable para referencia el usuario que vamos a borrar
+	const userIdDelete = ref(null);
+
+	//funcion cuando le damos clic al icono de borrar
+	const confirmUserDeletion = (id) =>
+	{
+		//le sacamos el id y lo guardamos en una variable
+		userIdDelete.value = id;
+		//modulo de confirmacion mostrandolo
+		$('#deleteUserModal').modal('show');
+	}
+
+	//funcion para el boton de borrar
+	const deleteUser = ()=>
+	{
+		//le pasamos el id y creamos la ruta en el web.php
+		axios.delete(`/api/users/${userIdDelete.value}`)
+		.then(()=>
+		{
+			$('#deleteUserModal').modal('hide');
+
+			toastr.success('User DELETE Successfully');
+
+			users.value.data = users.value.data.filter(user => user.id !== userIdDelete.value);
+		});
 	}
 
 	const bulkDelete = ()=>
@@ -324,17 +351,20 @@ import { Bootstrap4Pagination } from 'laravel-vue-pagination';
 
 						<tbody v-if="users.data.length > 0">
 							<!-- Llamamos los eventos del Userlist -->
-							<UserListItem v-for="(user,index) in users.data" :key = "user.id"
+							<UserListItem v-for="(user,index) in users.data" 
 
-							:user = user
+							:key = "user.id"
 
-							:index = index
+							:user=user 
+
+							:index=index
 
 							@edit-user = "editUser"
 
-							@user-deleted = "userDeleted"
+							@confirm-User-Deletion = "confirmUserDeletion"
 
-							@toggle-selection="toggleSelection" :select-all='selectAll'
+							@toggle-selection="toggleSelection" 
+							:select-all='selectAll'
 							/>		
 						</tbody>
 
@@ -407,6 +437,32 @@ import { Bootstrap4Pagination } from 'laravel-vue-pagination';
 		                    <button type="submit" class="btn btn-primary">Save</button>
 		                </div>
 		        </Form>
+	        </div>
+	    </div>
+	</div>
+
+		<div class="modal fade" id="deleteUserModal" data-backdrop="static" tabindex="-1" role="dialog"
+	        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	        <div class="modal-dialog" role="document">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <h5 class="modal-title" id="staticBackdropLabel">
+	                    	<span>DELETE USER</span>
+	                    </h5>
+	                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                        <span aria-hidden="true">&times;</span>
+	                    </button>
+	                </div>
+
+	                <div class="modal-body">
+	                	<h5>Are you sure deleting this user?</h5>
+	                </div>
+
+	                <div class="modal-footer">
+	                	<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+
+		                <button @click.prevent="deleteUser" type="button" class="btn btn-primary">Delete</button>
+	                </div>
 	        </div>
 	    </div>
 	</div>

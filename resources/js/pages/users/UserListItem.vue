@@ -3,6 +3,7 @@
 //importamos referencia 
 import {ref} from 'vue';
 import {useToastr} from '../../toastr.js';//notificacion de success para el formulario
+import UserListItem from './UserListItem.vue';
 
 
 	const toastr = useToastr();
@@ -34,7 +35,7 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 	});
 
 	//variable para referencia el usuario que vamos a borrar
-	const userIdDelete = ref(null);
+	/*const userIdDelete = ref(null);
 
 	//funcion cuando le damos clic al icono de borrar
 	const confirmUserDeletion = (user) =>
@@ -59,7 +60,7 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 			emit('userDeleted', userIdDelete.value);
 		
 		});
-	}
+	}*/
 
 	const changeRole = (user, role) =>
 	{
@@ -106,13 +107,13 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 				<i class="fa fa-edit" @click.prevent="$emit('editUser', user)"></i>
 			</a>
 			<a href="#">
-				<i class="fa fa-trash text-danger ml-2" @click.prevent="confirmUserDeletion(user)"></i>
+				<i class="fa fa-trash text-danger ml-2" @click.prevent="$emit('confirmUserDeletion', user.id)"></i>
 			</a>
 		</td>
 	</tr>
 
 
-	<!-- Confirmacion para eliminar user -->
+	<!-- Confirmacion para eliminar user 
 	<div class="modal fade" id="deleteUserModal" data-backdrop="static" tabindex="-1" role="dialog"
 	        aria-labelledby="staticBackdropLabel" aria-hidden="true">
 	        <div class="modal-dialog" role="document">
@@ -137,6 +138,6 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 	                </div>
 	        </div>
 	    </div>
-	</div>
+	</div>-->
 </template>
 
