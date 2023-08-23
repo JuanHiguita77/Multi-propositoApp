@@ -3,7 +3,8 @@
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Admin\AppointmentController;
+use App\Http\Controllers\Admin\AppointmentStatusController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,6 +25,8 @@ Route::get('/admin/dashboard', function () {
     return view('dashboard');
 });*/
 
+
+//ENDPOINTS DE LOS USERS
 //Obtenemos los usuarios con el metodo index en userController
 Route::get('/api/users', [UserController::class, 'index']);
 
@@ -42,9 +45,19 @@ Route::get('/api/users/search', [UserController::class, 'search']);
 
 
 Route::delete('/api/users', [UserController::class, 'bulkDelete']);
+//_____________________________________________________________
+
+//Obtener el estatus con un contador por clasificacion de tareas
+Route::get('/api/appointment-status', [AppointmentStatusController::class, 'getStatusWithCont']);
+
+//Endpoints del appointment
+
+Route::get('/api/appointments', [AppointmentController::class, 'index']);
 
 
 
 
+
+//____________________________________________________________
 //obtenemos la vista segun la ruta
 Route::get('{view}',ApplicationController::class)->where('view', '(.*)');

@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('client_id')->constrained();
             $table->string('title');
             $table->text('description');
-            $table->timestamp('start_time')->nullable();
-            $table->timestamp('end_time')->nullable();
+            $table->timestamp('start_time');
+            $table->timestamp('end_time');
             $table->tinyInteger('status');
             $table->timestamps();
         });
