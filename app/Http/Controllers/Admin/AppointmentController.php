@@ -45,4 +45,67 @@ class AppointmentController extends Controller
             ]);
 
     }
+
+    public function store()
+    {
+        //Validaciones por campos con vee-validate, y sirve para mandar el mensaje de llenado automatico en caso tal
+        $validated = request()->validate
+        ([
+            'client_id' => 'required',
+            'title' => 'required',
+            'description' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
+
+        ],
+
+        [
+            'client_id.required' => 'The Client Name Field is required',
+        ]);
+
+        //validando con vee-validate
+        Appointment::create([
+            'title' => $validated['title'],
+            'client_id' => $validated['client_id'],
+            'start_time' => $validated['start_time'],
+            'end_time' => $validated['end_time'],
+            'description' => $validated['description'],
+            'status' => AppointmentStatus::SCHEDULED,
+        ]);
+
+        return response()->json(['message' => 'success']);
+    }
+
+    public function edit(Appointment $appointment)
+    {
+        return $appointment;
+    }
+
+    public function update(Appointment $appointment)
+    {
+        $validated = request()->validate
+        ([
+            'client_id' => 'required',
+            'title' => 'required',
+            'description' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
+
+        ],
+
+        [
+            'client_id.required' => 'The Client Name Field is required',
+        ]);
+
+        $appointment->update($validated);
+
+        return response()->json(['success'=>true]);
+    }
+
+    public function destroy(Appointment $appointment)
+    {
+        $appointment->delete();
+
+        return response()->json(['success', true], 200);
+    }
 }

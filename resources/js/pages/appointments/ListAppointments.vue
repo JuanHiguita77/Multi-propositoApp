@@ -1,6 +1,8 @@
 <script setup>
 	import { ref, onMounted, computed } from 'vue';	
 	import axios from 'axios';
+	//sweetalert2
+	import Swal from 'sweetalert2';
 
 	//Se pasa cada estatus por su numero
 	//const appointmentStatus = {'scheduled': 1,'confirmed': 2,'cancelled': 3};
@@ -54,6 +56,37 @@
 		return appointmentStatus.value.map(status => status.count).reduce((acc, value) => acc + value, 0);
 	});
 
+	//Funcion para eliminar appointments		
+	const deleteAppointment = (id)=>
+	{
+		Swal.fire({
+		  title: 'Are you sure?',
+		  text: "You won't be able to revert this!",
+		  icon: 'warning',
+		  showCancelButton: true,
+		  confirmButtonColor: '#3085d6',
+		  cancelButtonColor: '#d33',
+		  confirmButtonText: 'Yes, delete it!'
+		})
+		.then((result) => {
+		  if (result.isConfirmed) {
+
+		  	axios.delete(`/api/appointments/${id}`)
+		  	.then((response)=>
+		  	{
+			  	appointments.value.data = appointments.value.data.filter(appointment => appointment.id !== id)
+
+			    Swal.fire
+			    (
+			      'Deleted!',
+			      'Your file has been deleted.',
+			      'success'
+			    )
+			})  	
+		  }
+		})
+	}
+
 	onMounted(() =>
 	{
 		getAppointments();
@@ -87,10 +120,10 @@
                 <div class="col-lg-12">
                     <div class="d-flex justify-content-between mb-2">
                         <div>
-                            <a href="">
+                            <router-link to="/admin/appointments/create">
                                 <button class="btn btn-primary"><i class="fa fa-plus-circle mr-1"></i> Add New
                                     Appointment</button>
-                            </a>
+                            </router-link>
                         </div>
                         <div class="btn-group">
                             <button @click="getAppointments()" type="button" class="btn" :class="[typeof selectedStatus === 'undefined' ? 'btn-secondary' : 'btn-default']" >
@@ -137,11 +170,13 @@
                                             <span class="badge" :class="`badge-${appointment.status.color}`">{{ appointment.status.name}}</span>
                                         </td>
                                         <td>
-                                            <a href="">
+                                        	<!-- boton de editar tareas -->
+                                            <router-link :to="`/admin/appointments/${appointment.id}/edit`">
                                                 <i class="fa fa-edit mr-2"></i>
-                                            </a>
+                                            </router-link>
 
-                                            <a href="">
+                                            <!-- boton de eliminar tareas  -->
+                                            <a href="#" @click.prevent="$event=>deleteAppointment(appointment.id)">
                                                 <i class="fa fa-trash text-danger"></i>
                                             </a>
                                         </td>
