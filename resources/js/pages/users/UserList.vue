@@ -33,14 +33,20 @@ import { Bootstrap4Pagination } from 'laravel-vue-pagination';
 	//metodo get para obtener usuarios de base de datos
 	const getUsers = (page = 1) =>
 	{
-		axios.get(`/api/users?page=${page}`)
+		axios.get(`/api/users?page=${page}`, {
+			params: {
+				query: searchQuery.value
+			}
+		})
+
 		.then((response) =>{
+
 			users.value = response.data;
 
 			selectedUsers.value = [];
 
 			selectAll.value = false;
-		});
+		})
 	}
 
 	onMounted(()=>
@@ -174,7 +180,7 @@ import { Bootstrap4Pagination } from 'laravel-vue-pagination';
 	const searchQuery = ref(null);
 
 	//Funcion peticion al servidor para la busqueda
-	const search = ()=>
+	/*const search = ()=>
 	{
 		axios.get('/api/users/search',
 		{
@@ -190,11 +196,11 @@ import { Bootstrap4Pagination } from 'laravel-vue-pagination';
 		{
 			console.log(error);
 		})
-	}
+	}*/
 
 	watch(searchQuery, debounce(()=>
 	{
-		search();
+		getUsers();
 	}, 300));
 
 	const selectedUsers = ref([]);

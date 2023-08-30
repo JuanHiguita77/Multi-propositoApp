@@ -11,8 +11,16 @@ class UserController extends Controller
     //Metodo para obtener los usuarios
     public function index()
     {
-        
-        $users = User::latest()->paginate(3);
+        $users = User::query()
+
+            ->when(request('query'), function($query, $searchQuery){
+            
+                $query->where('name','like', "%{$searchQuery}%");
+            })
+
+            ->latest()
+
+            ->paginate(4);
 
         /*->map(function ($user)
         {
@@ -24,6 +32,7 @@ class UserController extends Controller
                 'created_at' => $user->created_at->toFormattedDate(),
             ];  
         });*/
+
         return $users;
     }
 
@@ -80,15 +89,6 @@ class UserController extends Controller
         ]);
 
         return response()->json(['success' => true]);
-    }
-
-    public function search()
-    {
-        $searchQuery = request('query');
-
-        $users = User::where('name','like', "%{$searchQuery}%")->paginate();
-
-        return response()->json($users);
     }
 
     public function bulkDelete()

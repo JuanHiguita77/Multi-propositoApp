@@ -43,9 +43,6 @@ Route::put('/api/users/{user}', [UserController::class, 'update']);
 //Ruta para borrar usuarios, se le pasa el usuario completo y en la funcion controladora ya se saca el id
 Route::delete('/api/users/{user}', [UserController::class, 'delete']);
 
-//Busqueda de usuarios
-Route::get('/api/users/search', [UserController::class, 'search']);
-
 //Borrar varios usuarios
 Route::delete('/api/users', [UserController::class, 'bulkDelete']);
 //_____________________________________________________________
