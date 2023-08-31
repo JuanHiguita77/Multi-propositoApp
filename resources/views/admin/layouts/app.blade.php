@@ -223,20 +223,22 @@
 						</li>
 
 						<li class="nav-item">
-							<router-link to="/admin/" active-class="active" class="nav-link">
-								<i class="nav-icon fas fa-sign-out-alt"></i>
-								<p>
-									Logout
-									<span class="right badge badge-danger">New</span>
-								</p>
-							</router-link>
-						</li>
+							<form method="POST" action="{{ route('logout') }}"  class="nav-link">
 
+								@csrf
+
+								<a href="#" onClick="event.preventDefault(); this.closest('form').submit();" active-class="active">
+									<i class="nav-icon fas fa-sign-out-alt"></i>
+									<p>
+										Logout
+										<span class="right badge badge-danger">New</span>
+									</p>
+								</a>
+							</form>
+						</li>
 					</ul>
 				</nav>
-
 			</div>
-
 		</aside>
 
 		<div class="content-wrapper">
