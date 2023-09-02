@@ -26,7 +26,7 @@
 
 	 	.then(() =>
 	 	{
-	 		window.location('/admin/dashboard');
+	 		window.location.href = '/admin/dashboard';
 	 	})
 
         .catch((error) =>

@@ -5,6 +5,7 @@ use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\AppointmentStatusController;
+use App\Http\Controllers\Admin\DashboardStatController;
 use App\Http\Controllers\Admin\ClientController;
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,10 @@ use App\Http\Controllers\Admin\ClientController;
 //Ruta general para indicarle cuales rutas mostrar cuando se haga el login, de resto prohibe la entrada
 Route::middleware('auth')->group(function()
 {
+    //Ruta del controlador para los dashboard
+    Route::get('/api/stats/appointments', [DashboardStatController::class, 'appointments']);
+
+
     //ENDPOINTS DE LOS USERS
     //Obtenemos los usuarios con el metodo index en userController
     Route::get('/api/users', [UserController::class, 'index']);
