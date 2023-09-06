@@ -20,9 +20,38 @@ import { ref, onMounted } from 'vue';
 		})
 	}
 
+	//Hacemos la referencia a cuando se seleccione una opcion y se la damos a la variable para que sepa el rango
+	const selectedDateRange = ref('today');
+
+	//Referenciamos el contador e iniciamos en cero
+	const totalUsersCount = ref(0);
+
+
+	//Segundo paso, creacion del metodo para contar usuarios
+	const getUsersCount = ()=>
+	{
+		//hacemos la peticion de los datos de usuarios y extraemos el valor de la fecha de creacion
+		//Tercer paso del contador de usuarios: Creamos la ruta en web.php
+		axios.get('/api/stats/users', 
+		{
+			params: 
+			{
+				date_range: selectedDateRange.value,
+			}
+		})
+		.then((response) =>
+		{
+			//Le asignamos el valor que nos da la respuesta como valor al contador de usuarios
+			totalUsersCount.value = response.data.totalUsersCount;
+		})
+	}
+
 	onMounted(()=>
 	{
 		getAppointmentsCount();
+
+		//Quinto paso del contador de usuarios: Montamos el metodo para que este listo para ser ejecutado
+		getUsersCount();
 	});
 
 </script>
@@ -77,15 +106,21 @@ import { ref, onMounted } from 'vue';
         <div class="small-box bg-info">
             <div class="inner">
                 <div class="d-flex justify-content-between">
-                    <h3>0</h3>
-                    <select
+
+                	<!-- Cuarto paso del contador de usuarios: la respuesta json del controlador, la pasamos a donde se mostrara el resultado -->
+                    <h3>{{ totalUsersCount }}</h3>
+
+                    <!-- Contador de usuarios por dias en el dashboard -->
+                    <!-- Primero le damos el metodo para cuando haya un cambio en el select, segundo vamos a crear el metodo -->
+                    <!-- Cuarto paso: Le pasamos el v-model para que sepa cual es la referencia que hicimos antes y vamos al quinto paso montando el metodo getUsersCount-->
+                    <select v-model="selectedDateRange" @change="getUsersCount()"
                         style="height: 2rem; outline: 2px solid transparent;" class="px-1 rounded border-0">
-                        <option value="TODAY">Today</option>
-                        <option value="30">30 days</option>
-                        <option value="60">60 days</option>
-                        <option value="360">360 days</option>
-                        <option value="MTD">Month to Date</option>
-                        <option value="YTD">Year to Date</option>
+                        <option value="today">Today</option>
+                        <option value="30_days">30 days</option>
+                        <option value="60_days">60 days</option>
+                        <option value="360_days">360 days</option>
+                        <option value="month_to_date">Month to Date</option>
+                        <option value="year_to_date">Year to Date</option>
                     </select>
                 </div>
                 <p>Users</p>

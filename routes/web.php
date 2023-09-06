@@ -21,9 +21,14 @@ use App\Http\Controllers\Admin\ClientController;
 //Ruta general para indicarle cuales rutas mostrar cuando se haga el login, de resto prohibe la entrada
 Route::middleware('auth')->group(function()
 {
+    //ENDPOINT DEL DASHBOARD
     //Ruta del controlador para los dashboard
     Route::get('/api/stats/appointments', [DashboardStatController::class, 'appointments']);
 
+    //Tercer paso del contador de usuarios: crear la ruta 
+    //Cuarto paso: crear el metodo 'users' en el dashboardStatController
+    Route::get('/api/stats/users', [DashboardStatController::class, 'users']);
+    
 
     //ENDPOINTS DE LOS USERS
     //Obtenemos los usuarios con el metodo index en userController

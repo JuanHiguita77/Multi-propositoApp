@@ -3,7 +3,6 @@
 //importamos referencia 
 import {ref} from 'vue';
 import {useToastr} from '../../toastr.js';//notificacion de success para el formulario
-import UserListItem from './UserListItem.vue';
 
 
 	const toastr = useToastr();
