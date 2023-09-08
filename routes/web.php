@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\AppointmentStatusController;
 use App\Http\Controllers\Admin\DashboardStatController;
 use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\Admin\SettingController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -70,6 +71,14 @@ Route::middleware('auth')->group(function()
 
     //Eliminar los appointments
     Route::delete('/api/appointments/{appointment}', [AppointmentController::class, 'destroy']);
+
+    //RUTA DE LOS SETTINGS
+    //octavo paso: creamos la ruta del controlador para los settings y en la consola: 'php artisan make:controller Admin/SettingController'
+    //Noveno paso: crear la funcion en el controlador
+    Route::get('/api/settings', [SettingController::class, 'index']);
+
+    //Doceavo paso: creamos la ruta y su funcion en el controlador
+    Route::post('/api/settings', [SettingController::class, 'update']);
 
 });
 
