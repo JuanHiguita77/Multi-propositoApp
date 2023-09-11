@@ -45,6 +45,20 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    //Segundo paso para el formato de la fecha desde menu
+    //Agrega el nuevo formato seleccionado a la nueva respuesta json
+    protected $appends = 
+    [
+        'formatted_created_at',
+    ];
+
+    //Tercer paso para el formato de la fecha desde menu: Le asignamos el nuevo valor escogido en el menu, debemos indicarle correctamente los formatos tipo php en UpdateSettings.vue
+    public function getFormattedcreatedAtAttribute()
+    {
+        return $this->created_at->format(setting('date_format'));
+    }
+
+
     //Funcion accesora para mostrar el nombre de los roles, usando Enum RoleType
     public function role(): Attribute
     {

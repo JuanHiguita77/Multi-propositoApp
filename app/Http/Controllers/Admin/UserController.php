@@ -20,7 +20,9 @@ class UserController extends Controller
 
             ->latest()
 
-            ->paginate(4);
+            //Primer paso para configurar la paginacion desde el menu de opciones: Creamos un archivo llamado Helpers.php
+            //Tercer paso para configurar la paginacion desde el menu de opciones: Le pasamos la variable que contiene la configuracion asignada
+            ->paginate(setting('pagination_limit'));
 
         /*->map(function ($user)
         {

@@ -94,8 +94,10 @@ import {useToastr} from '../../toastr.js';//notificacion de success para el form
 		<td>{{user.name}}</td>
 		<td>{{user.email}}</td>
 
-		<!-- funcion de la fecha en UserController -->
-		<td>{{user.created_at}}</td>
+		<!-- Primer paso para el formato de la fecha desde menu en User.php 
+			Le pasamos la nueva data a mostrar que viene desde User
+		-->
+		<td>{{user.formatted_created_at}}</td>
 		<td>
 			<select class="form-control" @change="changeRole(user, $event.target.value)">
 				<option v-for="role in roles" :value="role.value" :selected="(user.role === user.name)" >{{role.name}}</option>
