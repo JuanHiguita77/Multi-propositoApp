@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AppointmentStatusController;
 use App\Http\Controllers\Admin\DashboardStatController;
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\ProfileController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -79,6 +80,13 @@ Route::middleware('auth')->group(function()
 
     //Doceavo paso: creamos la ruta y su funcion en el controlador
     Route::post('/api/settings', [SettingController::class, 'update']);
+
+
+    //Primer paso para crear la pestaña de profile: Definimos la ruta del index y creamos el controlador en consola donde iran los diferentas funciones: 'php artisan make:controller Admin/ProfileController'
+    Route::get('/api/profile', [ProfileController::class, 'index']);
+
+    //Septimo paso: crear el endpoint y luego su controlador en el archivo profilecontroller
+    Route::put('/api/profile', [ProfileController::class, 'update']);
 
 });
 

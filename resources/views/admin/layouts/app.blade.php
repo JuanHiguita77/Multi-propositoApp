@@ -169,7 +169,8 @@
 						<img src="https://adminlte.io/themes/v3/dist/img/user1-128x128.jpg" class="img-circle elevation-2" alt="User Image">
 					</div>
 					<div class="info">
-						<a href="#" class="d-block">Alexander Pierce</a>
+						<!-- Sacamos el nombre del usuario logeado en el momento -->
+						<a href="#" class="d-block">{{ auth()->user()->name }}</a>
 					</div>
 				</div>
 
