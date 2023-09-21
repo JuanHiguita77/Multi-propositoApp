@@ -166,7 +166,7 @@
 
 				<div class="user-panel mt-3 pb-3 mb-3 d-flex">
 					<div class="image">
-						<img src="https://adminlte.io/themes/v3/dist/img/user1-128x128.jpg" class="img-circle elevation-2" alt="User Image">
+						<img src="{{ auth()->user()->avatar }}" class="img-circle elevation-2" alt="User Image">
 					</div>
 					<div class="info">
 						<!-- Sacamos el nombre del usuario logeado en el momento -->

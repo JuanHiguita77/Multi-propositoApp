@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Cast\Attribute;
+//importacion storage para la foto de perfil del usuario
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable
 {
@@ -18,11 +20,14 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+
+    //Variable que se puede cambiar su informacion en cualquier momento con la autentificacion
     protected $fillable = [
         'name',
         'email',
         'password',
         'role',
+        'avatar',
     ];
 
     /**
@@ -64,6 +69,16 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: fn ($value) => RoleType::from($value)->name,
+        );
+       
+    }
+
+    //Decimo paso para la foto de perfil: 
+    public function avatar(): Attribute
+    {
+        //Está convirtiendo una ruta de almacenamiento en una URL pública que generalmente se utiliza para acceder a archivos almacenados en Laravel
+        return Attribute::make(
+            get: fn ($value) => asset(Storage::url($value) ?? 'noimage.png'),
         );
        
     }

@@ -56,6 +56,16 @@
 		return appointmentStatus.value.map(status => status.count).reduce((acc, value) => acc + value, 0);
 	});
 
+	//Actualizar el contador de tareas al eliminar o agregar 
+	const updateAppointmentStatusCount = (id) =>
+	{
+		const deleteAppointmentStatus = appointments.value.data.find(appointment => appointment.id === id).status.name;
+
+		const statusToUpdate = appointmentStatus.value.find(status => status.name === deleteAppointmentStatus);
+
+		statusToUpdate.count --;
+	} 
+
 	//Funcion para eliminar appointments		
 	const deleteAppointment = (id)=>
 	{
@@ -68,12 +78,16 @@
 		  cancelButtonColor: '#d33',
 		  confirmButtonText: 'Yes, delete it!'
 		})
+
 		.then((result) => {
 		  if (result.isConfirmed) {
 
 		  	axios.delete(`/api/appointments/${id}`)
+
 		  	.then((response)=>
 		  	{
+		  		updateAppointmentStatusCount(id);
+
 			  	appointments.value.data = appointments.value.data.filter(appointment => appointment.id !== id)
 
 			    Swal.fire

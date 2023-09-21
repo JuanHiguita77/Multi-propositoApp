@@ -69,8 +69,12 @@ return [
     |
     */
 
+    //Decimo paso para foto de perfil: Creamos el path para almacenar las imagenes y vamos a la vista blade principal
+    //para cambiar la foto de perfil en el menu tambien
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('storage/photos') => storage_path('app/photos'),
+
     ],
 
 ];

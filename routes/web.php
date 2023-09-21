@@ -88,6 +88,13 @@ Route::middleware('auth')->group(function()
     //Septimo paso: crear el endpoint y luego su controlador en el archivo profilecontroller
     Route::put('/api/profile', [ProfileController::class, 'update']);
 
+    //Septimo paso para la foto de perfil: Creamos la ruta y definimos la funcion en el controlador
+    Route::post('/api/upload-profile-image', [ProfileController::class, 'UploadImage']);
+    
+
+    //RUTA PARA EL CAMBIO DE CONTRASEÑA
+    //tercer paso: creamos la ruta y vamos al controlador
+    Route::post('/api/change-user-password', [ProfileController::class, 'changePassword']);
 });
 
 
