@@ -2,6 +2,9 @@
 
 	import { ref, onMounted, reactive } from 'vue';
 	import { useToastr } from '@/toastr';
+	import { useAuthUserStore } from '../../stores/AuthUserStore';
+
+	const authUserStore = useAuthUserStore();
 
 	//variable para mostrar el mensaje satisfactorio
 	const toastr = useToastr();
@@ -11,30 +14,22 @@
 
 	const fileInput = ref();
 
-	//Cuarto paso para el profile: definimos los campos de donde se van a extraer los datos y vamos a ProfileController.php
-	const form = ref({
-		name: '',
-		email: '',
-		role: '',
-	});
-
-
-	//tercer paso para el profile: Obtenemos el usuario completo
-	const getUser = () =>
-	{
-		axios.get('/api/profile')
-
-		.then((response) =>
-		{
-			form.value = response.data;
-		})
-	}
+	
+	//Se resumieron varios pasos en este con pinia
 
 	//Septimo paso: Mandamos la informacion con un put desde el formulario, ahora vamos a crear su endpoint o ruta en web.php
 	const updateProfile = () =>
 	{
+		//tercer paso para el profile: Obtenemos el usuario completo
+		//Cuarto paso para el profile: definimos los campos de donde se van a extraer los datos y vamos a ProfileController.php
+		//Sexto paso del profile: Montamos el metodo para obtener el usuario y mostramos el dato al usuario si es necesario como en este caso
 		//Noveno paso: Despues de tener la respuesta json vamos a mostrar el mensaje de actualizacion satisfactorio
-		axios.put('/api/profile', form.value)
+		axios.put('/api/profile',
+		{
+			name: authUserStore.user.name,
+			email: authUserStore.user.email,
+			role: authUserStore.user.role,
+		})
 
 		.then((response) =>
 		{
@@ -123,15 +118,6 @@
 		});
 	}
 
-
-	//Sexto paso del profile: Montamos el metodo para obtener el usuario y mostramos el dato al usuario si es necesario como en este caso
-	//Se muestra la informacion en el html en este caso: {{ form.name }}
-	onMounted(()=>
-	{
-		getUser();
-	});
-
-
 </script>
 
 <template>
@@ -164,12 +150,12 @@
                     <input @change="handleFileChange" ref="fileInput" type="file" class="d-none">
                     <!-- Tercer paso para la imagen del perfil: Llamamos el metodo para abrir la ventana de selección para el archivo -->
                     														<!-- Le pasamos un condicional para pasar la url o una imagen personalizada para cuando no hay nada -->
-                    <img @click="openFileInput" class="profile-user-img img-circle" :src="profilePictureUrl ? profilePictureUrl : form.avatar " alt="User profile picture">
+                    <img @click="openFileInput" class="profile-user-img img-circle" :src="profilePictureUrl ? profilePictureUrl : authUserStore.user.avatar" alt="User profile picture">
                 </div>
 
-                <h3 class="profile-username text-center">{{ form.name }}</h3>
+                <h3 class="profile-username text-center">{{ authUserStore.user.name }}</h3>
 
-                <p class="text-muted text-center">{{ form.role }}</p>
+                <p class="text-muted text-center">{{ authUserStore.user.role }}</p>
             </div>
         </div>
     </div>
@@ -191,7 +177,7 @@
                             <div class="form-group row">
                                 <label for="inputName" class="col-sm-2 col-form-label">Name</label>
                                 <div class="col-sm-10">
-                                    <input v-model="form.name" type="text" class="form-control" id="inputName" placeholder="Name">
+                                    <input v-model="authUserStore.user.name" type="text" class="form-control" id="inputName" placeholder="Name">
 
 									<!--   Mostramos el mensaje de error en caso tal -->
                                     <span class="text-danger text-sm" v-if="errors && errors.name">{{ errors.name[0] }}</span>
@@ -202,7 +188,7 @@
                             <div class="form-group row">
                                 <label   for="inputEmail" class="col-sm-2 col-form-label">Email</label>
                                 <div class="col-sm-10">
-                                    <input v-model="form.email" type="email" class="form-control " id="inputEmail" placeholder="Email">
+                                    <input v-model="authUserStore.user.email" type="email" class="form-control " id="inputEmail" placeholder="Email">
                                     
                                     <!--   Mostramos el mensaje de error en caso tal -->
                                     <span class="text-danger text-sm" v-if="errors && errors.email">{{ errors.email[0] }}</span>

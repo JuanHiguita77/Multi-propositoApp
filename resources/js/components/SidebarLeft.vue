@@ -1,5 +1,8 @@
 <script setup>
-	
+	import { useAuthUserStore } from '../stores/AuthUserStore';
+
+	const authUserStore = useAuthUserStore();
+
 	defineProps({
 		user: Object,
 		settings: Object,
@@ -14,8 +17,9 @@
 				<img src="https://adminlte.io/themes/v3/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
 				<!-- Tercer paso para guardar la cache: Aqui ya usamos los nuevos datos para mostrarlos -->
 				<!-- Tenemos que definir valores por default en caso de no tener cache, creamos nuevo archivo settings.php en config -->
-				<span class="brand-text font-weight-light">{{settings?.app_name}}</span>
+				<span class="brand-text font-weight-light"> APP NAME </span>
 			</a>
+			<!-- {{settings.app_name}} -->
 
 			<div class="sidebar">
 
@@ -25,7 +29,7 @@
 					</div>
 					<div class="info">
 						<!-- Sacamos el nombre del usuario logeado en el momento -->
-						<a href="#" class="d-block">{{ user?.name }}</a>
+						<a href="#" class="d-block">{{ authUserStore.user.name }}</a>
 					</div>
 				</div>
 
