@@ -16,9 +16,7 @@
 
 <body class="hold-transition sidebar-mini">
 		<!--  EStamos pasando el cuerpo desde un componente vue: App.vue -->
-		<div id="app">
-
-	    </div>
+		<div id="app"></div>
 
 	<!--  segundo paso sidebar: Creamos el evento para cuando se hace clic en el boton de despliegue-->
 	<script>

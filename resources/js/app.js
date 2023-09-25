@@ -13,13 +13,26 @@ const app = createApp(App);
 const router = createRouter({
 
 	routes:Routes,
-	history: createWebHistory(),
+	history:createWebHistory(),
 });
 
 //Le indicamos que tipo de enrutador usaremos
 app.use(router);
-//Cargamos la pagina de login
-app.component('Login', Login)
 
-//Montamos la pagina principal
-app.mount('#app');
+
+if (window.location.pathname === '/login')
+{
+	const currentApp = createApp({});
+
+	//Cargamos la pagina de login
+	currentApp.component('Login', Login);
+
+	//Montamos en la pagina de login
+	currentApp.mount('#login');
+}
+else 
+{
+	//Montamos la pagina principal
+	app.mount('#app');
+};
+

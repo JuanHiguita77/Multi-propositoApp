@@ -10,11 +10,9 @@
 </head>
 
 <body class="hold-transition login-page">
-    <div id="app">
+    <div id="login">
         <!-- Insertamos el componente login de vue con su nombre tal cual-->
-        <router-view>
-            <Login/>   
-        </router-view>
+        <Login/>   
     </div>
 </body>
 
